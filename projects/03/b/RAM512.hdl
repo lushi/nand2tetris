@@ -15,5 +15,21 @@ CHIP RAM512 {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+		// use DMux to direct load signal to the right RAM64 location
+		// using first 3 bits of address to locate RAM64 location
+		// using the rest to locate register in the RAM64
+		DMux8Way(sel=address[0..2], in=load, a=l0, b=l1, c=l2, d=l3, e=l4, f=l5, g=l6, h=l7);
+
+		RAM64(load=l0, in=in, address=address[3..8], out=o0);
+		RAM64(load=l1, in=in, address=address[3..8], out=o1);
+		RAM64(load=l2, in=in, address=address[3..8], out=o2);
+		RAM64(load=l3, in=in, address=address[3..8], out=o3);
+		RAM64(load=l4, in=in, address=address[3..8], out=o4);
+		RAM64(load=l5, in=in, address=address[3..8], out=o5);
+		RAM64(load=l6, in=in, address=address[3..8], out=o6);
+		RAM64(load=l7, in=in, address=address[3..8], out=o7);
+
+		// use Mux to direct the out value fom the right RAM64 chip
+		// to the out pin
+		Mux8Way16(sel=address[0..2], a=o0, b=o1, c=o2, d=o3, e=o4, f=o5, g=o6, h=o7, out=out);
 }
