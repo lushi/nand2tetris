@@ -16,5 +16,16 @@ CHIP PC {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+		// let's start by incrementing out[t]
+		Inc16(in=regout, out=incin);
+
+		// start processing from the last else-if statement on up
+		// because last else-if is reached only if previous are false
+		// and so on up the chain
+		Mux16(sel=inc, a=regout, b=incin, out=o1);
+		Mux16(sel=load, a=o1, b=in, out=o2);
+		Mux16(sel=reset, a=o2, b=false, out=o3);
+
+		// put o3 in the register
+		Register(load=true, in=o3, out=regout, out=out);
 }
